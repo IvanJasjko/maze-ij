@@ -1,0 +1,5 @@
+package mazeij
+
+object Printer {
+
+}

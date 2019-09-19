@@ -1,12 +1,13 @@
 package mazeij
 
+import MazeBuilder._
+
 object Main {
 
-  def add(x: Int, y: Int): Int = {
-    x + y
-  }
-
   def main(args: Array[String]): Unit = {
-    println(add(2, 3))
+
+    val grid = new Grid(10)
+    traverseGrid(grid)
+
   }
 }
