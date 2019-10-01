@@ -2,8 +2,13 @@ package mazeij
 
 class Grid(size: Int) {
 
-  val emptyGrid: Nodes = buildNodeGrid()
+  val gridSeq: Nodes = buildNodeGrid()
+  val gridMap: Map[Cords, Seq[Cords]] = gridSeq.map(node => node.cords -> node.connected).toMap
   val gridSize: Int = size
+
+  def updateGrid(NodePairs: Seq[(Node, Node)]): Nodes = {
+    buildNodeGrid()
+  }
 
   private def buildNodeGrid(): Nodes = {
     val cordList = buildGrid(1, size)
