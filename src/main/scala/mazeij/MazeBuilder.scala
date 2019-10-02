@@ -8,27 +8,27 @@ class MazeBuilder(grid: Grid) {
 
   private val gridSeq = grid.gridSeq
   private val gridMap = grid.gridMap
+  private val size = grid.gridSize
+  //Seed cell
+  val startNode: Node = chooseStart()
 
-  def traverseGrid(): Seq[(Cords, Cords)] = {
-    //Seed cell
-    val startNode = gridSeq(Random.nextInt(gridSeq.size))
-
+  def wallsToRemove(): Seq[(Cords, Cords)] = {
     val queue = ListBuffer(startNode.cords)
     val visited = ListBuffer(startNode.cords)
-    val wallsToKeep: ListBuffer[(Cords, Cords)] = ListBuffer()
+    val wallsForRemoval: ListBuffer[(Cords, Cords)] = ListBuffer()
 
     while (visited.size != gridSeq.size) {
-      val pathNode = makeNode(visited.last)
-      val cordPair = popUntilFound(pathNode, queue, visited)
+      val prevNode = makeNode(visited.last)
+      val newCordPair = popUntilFound(prevNode, queue, visited)
 
-      val prevCords = cordPair._1
-      val nextNode = makeNode(cordPair._2)
+      val nextNode = makeNode(newCordPair._2)
 
       updateBuffer(visited, nextNode.cords)
       updateBuffer(queue, nextNode.cords)
-      wallsToKeep += Tuple2(prevCords, nextNode.cords)
+
+      wallsForRemoval += removeWall(newCordPair._1, newCordPair._2)
     }
-    wallsToKeep
+    wallsForRemoval
   }
 
   private def updateBuffer(visitedCords: ListBuffer[Cords], cords: Cords): ListBuffer[Cords] = {
@@ -47,7 +47,22 @@ class MazeBuilder(grid: Grid) {
       popUntilFound(makeNode(queue.head), queue.tail, visited)
   }
 
+  private def chooseStart(): Node = {
+    val xChoices = (for (y <- 2 until size) yield List(Cords(1, y), Cords(size, y))).flatten
+    val yChoices = (for (x <- 2 until size) yield List(Cords(x, 1), Cords(x, size))).flatten
+    val edges = xChoices ++ yChoices
+    makeNode(edges(Random.nextInt(edges.length)))
+  }
+
   private def makeNode(cords: Cords): Node = {
     Node(cords, gridMap(cords))
+  }
+
+  private def removeWall(start: Cords, finish: Cords): (Cords, Cords) = {
+    if (start.y == finish.y) {
+      (finish, Cords(finish.x + 1, finish.y))
+    } else {
+      (finish, Cords(finish.x, finish.y + 1))
+    }
   }
 }

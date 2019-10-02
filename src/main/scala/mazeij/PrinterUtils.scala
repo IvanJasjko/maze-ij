@@ -25,4 +25,8 @@ object PrinterUtils {
   def printOpenBottom(): Unit = {
     print("| ")
   }
+
+  def printOpenBoth(): Unit = {
+    print("  ")
+  }
 }
