@@ -2,12 +2,15 @@ package mazeij
 
 class Grid(size: Int) {
 
-  val gridSeq: Nodes = buildNodeGrid()
-  val gridMap: Map[Cords, Seq[Cords]] = gridSeq.map(node => node.cords -> node.connected).toMap
   val gridSize: Int = size
 
-  def updateGrid(NodePairs: Seq[(Node, Node)]): Nodes = {
+  def makeGraph(wallsToRemove: Seq[(Cords, Cords)] = Seq()): Graph = {
     buildNodeGrid()
+      .map(node => node.cords -> (node.connected diff wallsToRemove
+        .filter(_.productIterator.toList.contains(node.cords))
+        .map(_.productIterator.toList.filter(_ != node.cords).head)
+        )
+      ).toMap
   }
 
   private def buildNodeGrid(): Nodes = {
@@ -22,7 +25,7 @@ class Grid(size: Int) {
       Cords(cords.x, cords.y + 1),
       Cords(cords.x, cords.y - 1)
     )
-    connections.filter(cords => isEdge(cords))
+    connections.filter(isEdge)
   }
 
   private def isEdge(cords: Cords): Boolean = {
