@@ -49,11 +49,6 @@ object PrinterUtils {
       return s"""*   *
                 || $symbol |
                 |*****""".stripMargin
-
-    if (noLeftConn(node, connections))
-      return s"""*****
-                || $symbol ${" "}
-                |*****""".stripMargin
     nodeStr
   }
 
