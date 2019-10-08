@@ -22,7 +22,7 @@ object MazeBuilder {
 
     val maze = grid.makeGraph(pathWalls ++ extraWalls)
     printGraph(maze, start, finish)
-    fullGraph
+    maze
   }
 
   private def chooseStartNode(graph: Graph): Cords = {
