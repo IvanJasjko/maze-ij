@@ -5,7 +5,6 @@ object PrinterUtils {
   def printGraph(graph: Graph, start: Cords, finish: Cords): Unit = {
 
     val size = math.sqrt(graph.size).toInt
-    var botRowBuffer = ""
 
     //Newline to tackle my OCD
     println()
@@ -25,9 +24,8 @@ object PrinterUtils {
 
       println(topRow)
       println(midRow)
-      botRowBuffer = botRow
+      if (y == size) println(botRow)
     }
-    println(botRowBuffer)
   }
 
   private def initNode(node: Cords, connections: Seq[Cords], size: Int, symbol: String): String = {
